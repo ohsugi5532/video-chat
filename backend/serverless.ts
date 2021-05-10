@@ -1,6 +1,6 @@
 import type { AWS } from '@serverless/typescript';
 
-import hello from '@functions/hello';
+import videoChat from '@functions/videoChat';
 
 const serverlessConfiguration: AWS = {
   service: 'backend',
@@ -11,7 +11,10 @@ const serverlessConfiguration: AWS = {
       includeModules: true,
     },
   },
-  plugins: ['serverless-webpack'],
+  plugins: [
+    'serverless-webpack',
+  ],
+  useDotenv: true,
   provider: {
     name: 'aws',
     region: 'ap-northeast-1',
@@ -26,7 +29,7 @@ const serverlessConfiguration: AWS = {
     lambdaHashingVersion: '20201221',
   },
   // import the function via paths
-  functions: { hello },
+  functions: { videoChat },
 };
 
 module.exports = serverlessConfiguration;
