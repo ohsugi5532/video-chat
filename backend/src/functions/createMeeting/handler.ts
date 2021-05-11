@@ -14,26 +14,34 @@ const chime = new AWS.Chime({ region: 'us-east-1' }); // MediaRegionと同じく
 chime.endpoint = new AWS.Endpoint(AWS_END_POINT);  
 
 const createMeeting: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
-  const meetingId = uuid();
-  const meeting = await chime.createMeeting({
-    ClientRequestToken: meetingId,
-    ExternalMeetingId: meetingId,
-    MediaRegion: process.env.AWS_REGION,
-  }).promise();
-
-  const userId = `${uuid().substring(0, 8)}#${event.body.clientId}`;
-  const attendee = await chime.createAttendee({
-    MeetingId: meeting.Meeting.MeetingId,
-    ExternalUserId: userId,
-  }).promise();
-
-  return formatJSONResponse({
-    info: {
-      meeting,
-      attendee,
-    },
-    event,
-  });
+  try {
+    const meetingId = uuid();
+    const meeting = await chime.createMeeting({
+      ClientRequestToken: meetingId,
+      ExternalMeetingId: meetingId,
+      MediaRegion: process.env.AWS_REGION,
+    }).promise();
+  
+    const userId = `${uuid().substring(0, 8)}#${event.body.clientId}`;
+    const attendee = await chime.createAttendee({
+      MeetingId: meeting.Meeting.MeetingId,
+      ExternalUserId: userId,
+    }).promise();
+  
+    return formatJSONResponse({
+      info: {
+        meeting,
+        attendee,
+      },
+      event,
+    });
+  } catch(error) {
+    throw new Error(JSON.stringify({
+      statusCode: 503,      
+      message: error,
+      event,
+    }));
+  }
 }
 
 export const main = middyfy(createMeeting);

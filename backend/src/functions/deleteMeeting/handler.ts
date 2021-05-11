@@ -13,16 +13,22 @@ const chime = new AWS.Chime({ region: 'us-east-1' }); // MediaRegionと同じく
 chime.endpoint = new AWS.Endpoint(AWS_END_POINT);  
 
 const deleteMeeting: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
-  let meetingId = event.body.meetingId;
-  if (meetingId) {
+  try {
+    const meetingId = event.body.meetingId;
     await chime.deleteMeeting({
       MeetingId: meetingId,
     }).promise();
+  
+    return formatJSONResponse({
+      event,
+    });
+  } catch(error) {
+    throw new Error(JSON.stringify({
+      statusCode: 404,      
+      message: error,
+      event,
+    }));
   }
-
-  return formatJSONResponse({
-    event,
-  });
 }
 
 export const main = middyfy(deleteMeeting);
