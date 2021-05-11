@@ -6,34 +6,23 @@ import { middyfy } from '@libs/lambda';
 import schema from './schema';
 
 import * as AWS from 'aws-sdk';
-import {v4 as uuid} from 'uuid';
 
 const AWS_END_POINT = 'https://service.chime.aws.amazon.com/console';
 AWS.config.credentials = new AWS.Credentials(process.env.ACCESS_KEY, process.env.SECRET_KEY, null);
 const chime = new AWS.Chime({ region: 'us-east-1' }); // MediaRegionと同じくTOKYOにするとエラーになる
 chime.endpoint = new AWS.Endpoint(AWS_END_POINT);  
 
-const createMeeting: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
-  const meetingId = uuid();
-  const meeting = await chime.createMeeting({
-    ClientRequestToken: meetingId,
-    ExternalMeetingId: meetingId,
-    MediaRegion: process.env.AWS_REGION,
-  }).promise();
-
-  const userId = `${uuid().substring(0, 8)}#${event.body.clientId}`;
-  const attendee = await chime.createAttendee({
-    MeetingId: meeting.Meeting.MeetingId,
-    ExternalUserId: userId,
-  }).promise();
+const deleteMeeting: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
+  let meetingId = event.body.meetingId;
+  if (meetingId) {
+    await chime.deleteMeeting({
+      MeetingId: meetingId,
+    }).promise();
+  }
 
   return formatJSONResponse({
-    info: {
-      meeting,
-      attendee,
-    },
     event,
   });
 }
 
-export const main = middyfy(createMeeting);
+export const main = middyfy(deleteMeeting);

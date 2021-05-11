@@ -1,6 +1,7 @@
 import type { AWS } from '@serverless/typescript';
 
 import createMeeting from '@functions/createMeeting';
+import deleteMeeting from '@functions/deleteMeeting';
 
 const serverlessConfiguration: AWS = {
   service: 'backend',
@@ -29,7 +30,7 @@ const serverlessConfiguration: AWS = {
     lambdaHashingVersion: '20201221',
   },
   // import the function via paths
-  functions: { createMeeting },
+  functions: { createMeeting, deleteMeeting },
 };
 
 module.exports = serverlessConfiguration;
