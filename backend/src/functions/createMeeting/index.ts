@@ -7,7 +7,7 @@ export default {
     {
       http: {
         method: 'post',
-        path: 'hello',
+        path: 'createMeeting',
         request: {
           schema: {
             'application/json': schema

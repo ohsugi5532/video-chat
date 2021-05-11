@@ -1,1 +1,1 @@
-export { default as videoChat } from './videoChat';
+export { default as createMeeting } from './createMeeting';

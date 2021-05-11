@@ -13,7 +13,7 @@ AWS.config.credentials = new AWS.Credentials(process.env.ACCESS_KEY, process.env
 const chime = new AWS.Chime({ region: 'us-east-1' }); // MediaRegionと同じくTOKYOにするとエラーになる
 chime.endpoint = new AWS.Endpoint(AWS_END_POINT);  
 
-const videoChat: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
+const createMeeting: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
   let meeting = undefined;
   let meetingId = event.body.meetingId;
   if (!meetingId) {
@@ -48,4 +48,4 @@ const videoChat: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (even
   });
 }
 
-export const main = middyfy(videoChat);
+export const main = middyfy(createMeeting);

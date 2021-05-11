@@ -1,6 +1,6 @@
 import type { AWS } from '@serverless/typescript';
 
-import videoChat from '@functions/videoChat';
+import createMeeting from '@functions/createMeeting';
 
 const serverlessConfiguration: AWS = {
   service: 'backend',
@@ -29,7 +29,7 @@ const serverlessConfiguration: AWS = {
     lambdaHashingVersion: '20201221',
   },
   // import the function via paths
-  functions: { videoChat },
+  functions: { createMeeting },
 };
 
 module.exports = serverlessConfiguration;
