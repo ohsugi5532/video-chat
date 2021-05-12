@@ -4,5 +4,5 @@ export default {
     meetingId: { type: 'string' },
     clientId: { type: 'string' },
   },
-  require: ['meetingId', 'clientId'],
+  required: ['meetingId', 'clientId'],
 } as const;

@@ -3,5 +3,5 @@ export default {
   properties: {
     meetingId: { type: 'string' },
   },
-  require: ['meetingId'],
+  required: ['meetingId'],
 } as const;

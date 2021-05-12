@@ -3,5 +3,5 @@ export default {
   properties: {
     clientId: { type: 'string' },
   },
-  require: ['clientId'],
+  required: ['clientId'],
 } as const;
