@@ -9,9 +9,20 @@ export default {
         method: 'post',
         path: 'joinMeeting',
         request: {
-          schema: {
+          schemas: {
             'application/json': schema
           }
+        },
+        cors: {
+          origins: '*',
+          headers: [
+            'Content-Type',
+            'Authorization',
+            'X-Api-Key',
+            'X-Amz-Date',
+            'X-Amz-Security-Token',
+            'X-Amz-User-Agent'
+          ]
         }
       }
     }
