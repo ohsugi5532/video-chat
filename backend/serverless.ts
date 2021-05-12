@@ -30,7 +30,6 @@ const serverlessConfiguration: AWS = {
     },
     lambdaHashingVersion: '20201221',
   },
-  // import the function via paths
   functions: { createMeeting, deleteMeeting, joinMeeting },
 };
 

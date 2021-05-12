@@ -22,14 +22,15 @@ const joinMeeting: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (ev
       MeetingId: meetingId,
     }).promise();
   
-    await chime.createAttendee({
+    const attendee = await chime.createAttendee({
       MeetingId: meeting.Meeting.MeetingId,
       ExternalUserId: `${uuid().substring(0, 8)}#${clientId}`,
-    })
+    }).promise();
   
     return formatJSONResponse({
       info: {
         meeting,
+        attendee,
       },
       event,
     });    
