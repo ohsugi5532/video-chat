@@ -39,7 +39,7 @@ export async function joinMeeting (
   return data;
 }
 
-export async function endMeeting (
+export async function deleteMeeting (
   meetingId: string,
 ) {
   const response = await fetch(
