@@ -1,19 +1,23 @@
 import React, { useRef, useState } from "react";
+import { useHistory } from 'react-router-dom';
+import routes from '../../routes';
 import styled from 'styled-components';
 import {
   Heading,
   MicSelection,
   Label,
   SpeakerSelection,
+  PrimaryButton,
   SecondaryButton,
   CameraSelection,
   QualitySelection,
   PreviewVideo,
   useLocalAudioInputActivityPreview,
   useAudioOutputs,
+  useMeetingManager,
 } from 'amazon-chime-sdk-component-library-react';
 import TestSound from './TestSound';
-import{ StyledContainer, StyledPanel } from './Styled';
+import{ StyledContainer, StyledDiv, StyledPanel } from './Styled';
 
 const Track = styled.div`
   width: 100%;
@@ -33,6 +37,10 @@ const Progress = styled.div`
 `;
 
 const DeviceSetup: React.FC = () => {
+  const history = useHistory();
+  // const { meetingId, localUserName } = useAppState();
+  const meetingManager = useMeetingManager();
+
   const activityBarRef = useRef<HTMLDivElement>(null);
   useLocalAudioInputActivityPreview(activityBarRef);
 
@@ -47,33 +55,47 @@ const DeviceSetup: React.FC = () => {
     new TestSound(selectedOutput);
   };
 
+  const enterMeeting = async () => {
+    try {
+      await meetingManager.start();
+      history.push(`${routes.MEETING}`);
+    } catch(err) {
+      // nothing to do.
+    }
+  }
+
   return (
     <StyledContainer>
-      <StyledPanel>
-        <Heading tag="h2" level={6}>
-          Audio
-        </Heading>
-        <MicSelection />
-        <Label style={{ display: 'block', marginBottom: '.5rem' }}>
-          Microphone activity
-        </Label>
-        <Track>
-          <Progress ref={activityBarRef} />
-        </Track>
-        <SpeakerSelection onChange={handleChange} />
-        <SecondaryButton label="Test speakers" onClick={handleTestSpeaker} />
-      </StyledPanel>
-      <StyledPanel>
-        <Heading tag="h2" level={6}>
-          Video
-        </Heading>
-        <CameraSelection />
-        <QualitySelection />
-        <Label style={{ display: 'block', marginBottom: '.5rem' }}>
-          Video preview
-        </Label>
-        <PreviewVideo />
-      </StyledPanel>
+      <StyledDiv>
+        <StyledPanel>
+          <Heading tag="h2" level={6}>
+            Audio
+          </Heading>
+          <MicSelection />
+          <Label style={{ display: 'block', marginBottom: '.5rem' }}>
+            Microphone activity
+          </Label>
+          <Track>
+            <Progress ref={activityBarRef} />
+          </Track>
+          <div style={{ marginTop: '1rem' }}>
+            <SpeakerSelection onChange={handleChange} />
+            <SecondaryButton label="Test speakers" onClick={handleTestSpeaker} />
+          </div>
+        </StyledPanel>
+        <StyledPanel>
+          <Heading tag="h2" level={6}>
+            Video
+          </Heading>
+          <CameraSelection />
+          <QualitySelection />
+          <Label style={{ display: 'block', marginBottom: '.5rem' }}>
+            Video preview
+          </Label>
+          <PreviewVideo />
+        </StyledPanel>
+      </StyledDiv>
+      <PrimaryButton label={'Enter'} onClick={enterMeeting} />
     </StyledContainer>
   )
 };
