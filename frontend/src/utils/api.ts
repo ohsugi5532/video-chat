@@ -1,4 +1,6 @@
-const BASE_URL = 'https://7m98elidxl.execute-api.ap-northeast-1.amazonaws.com/dev/';
+import axios from 'axios';
+
+const BASE_URL = 'https://7m98elidxl.execute-api.ap-northeast-1.amazonaws.com/dev';
 
 export type MeetingResponse = {
   info: {
@@ -11,24 +13,47 @@ export async function createMeeting (
   meetingId: string,
   clientId: string
 ): Promise<MeetingResponse> {
-  const response = await fetch(
-    `${BASE_URL}createMeeting?meetingId=${encodeURIComponent(meetingId)}&clientId=${encodeURIComponent(clientId)}`
-  );
-  const data = await response.json();
+  const data = {
+    'body': {
+      'meetinId': meetingId,
+      'clientId': clientId,
+    }
+  }
+  const headers = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+  }
+  const response = await axios.post(`${BASE_URL}/createMeeting`, data, {
+    headers,
+  });
+  const result = await response.data;
 
-  if (data.error) {
-    throw new Error(`Server error: ${data.error}`);
+  if (result.error) {
+    throw new Error(`Server error: ${result.error}`);
   }
 
-  return data;
+  return result;
 }
 
 export async function joinMeeting (
   meetingId: string,
   clientId: string
 ): Promise<MeetingResponse> {
+  const body = {
+    'meetinId': meetingId,
+    'clientId': clientId,
+  }
+  const headers = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+  }
   const response = await fetch(
-    `${BASE_URL}joinMeeting?meetingId=${encodeURIComponent(meetingId)}&clientId=${encodeURIComponent(clientId)}`
+    `${BASE_URL}/joinMeeting`,
+    {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(body),
+    }
   );
   const data = await response.json();
 
@@ -42,8 +67,20 @@ export async function joinMeeting (
 export async function deleteMeeting (
   meetingId: string,
 ) {
+  const body = {
+    'meetingId': meetingId,
+  }
+  const headers = {
+    'Content-Type': 'application/json',
+    'Access-Control-Allow-Origin': '*',
+  }
   const response = await fetch(
-    `${BASE_URL}deleteMeeting?meetingId=${encodeURIComponent(meetingId)}`
+    `${BASE_URL}/deleteMeeting`,
+    {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(body),
+    }
   );
   const data = await response.json();
 
