@@ -41,17 +41,17 @@ const Home: React.FC = () => {
   const join = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!meetingId || !clientId) {
-      if (!meetingId) setMeetingIdError(true);
-      if (!clientId) setClientIdError(true);
-      return;
-    }
+    // if (!meetingId || !clientId) {
+    //   if (!meetingId) setMeetingIdError(true);
+    //   if (!clientId) setClientIdError(true);
+    //   return;
+    // }
 
-    const data = await joinMeeting(meetingId, clientId);
-    await meetingManager.join({
-      meetingInfo: data.info.meeting,
-      attendeeInfo: data.info.meeting,
-    });
+    // const data = await joinMeeting(meetingId, clientId);
+    // await meetingManager.join({
+    //   meetingInfo: data.info.meeting,
+    //   attendeeInfo: data.info.meeting,
+    // });
 
     history.push(routes.DEVICE);
   }
