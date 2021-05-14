@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'https://7m98elidxl.execute-api.ap-northeast-1.amazonaws.com/dev';
+const BASE_URL = 'https://1ccis2cedd.execute-api.ap-northeast-1.amazonaws.com/dev';
 
 export type MeetingResponse = {
   info: {
