@@ -14,14 +14,11 @@ export async function createMeeting (
   clientId: string
 ): Promise<MeetingResponse> {
   const data = {
-    'body': {
-      'meetinId': meetingId,
-      'clientId': clientId,
-    }
+    meetingId,
+    clientId,
   }
   const headers = {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*',
+    'Content-Type': 'application/json', 
   }
   const response = await axios.post(`${BASE_URL}/createMeeting`, data, {
     headers,
@@ -39,52 +36,42 @@ export async function joinMeeting (
   meetingId: string,
   clientId: string
 ): Promise<MeetingResponse> {
-  const body = {
-    'meetinId': meetingId,
-    'clientId': clientId,
+  const data = {
+    meetingId,
+    clientId,
   }
   const headers = {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*',
+    'Content-Type': 'application/json', 
   }
-  const response = await fetch(
-    `${BASE_URL}/joinMeeting`,
-    {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(body),
-    }
-  );
-  const data = await response.json();
+  const response = await axios.post(`${BASE_URL}/joinMeeting`, data, {
+    headers,
+  });
+  const result = await response.data;
 
-  if (data.error) {
-    throw new Error(`Server error: ${data.error}`);
+  if (result.error) {
+    throw new Error(`Server error: ${result.error}`);
   }
 
-  return data;
+  return result;
 }
 
 export async function deleteMeeting (
   meetingId: string,
 ) {
-  const body = {
-    'meetingId': meetingId,
+  const data = {
+    meetingId,
   }
   const headers = {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*',
+    'Content-Type': 'application/json', 
   }
-  const response = await fetch(
-    `${BASE_URL}/deleteMeeting`,
-    {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(body),
-    }
-  );
-  const data = await response.json();
+  const response = await axios.post(`${BASE_URL}/deleteMeeting`, data, {
+    headers,
+  });
+  const result = await response.data;
+  
+  if (result.error) {
+    throw new Error(`Server error: ${result.error}`);
+  }
 
-  if (data.error) {
-    throw new Error(`Server error: ${data.error}`);
-  }
+  return result;
 }

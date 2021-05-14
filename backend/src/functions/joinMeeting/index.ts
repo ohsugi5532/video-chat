@@ -18,6 +18,7 @@ export default {
           headers: [
             'Content-Type',
             'Authorization',
+            'Access-Control-Allow-Origin',
             'X-Api-Key',
             'X-Amz-Date',
             'X-Amz-Security-Token',

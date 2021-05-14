@@ -1,12 +1,15 @@
 import 'source-map-support/register';
-
 import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/apiGateway';
 import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
 import schema from './schema';
-
 import * as AWS from 'aws-sdk';
 import {v4 as uuid} from 'uuid';
+
+const headers = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': '*',
+}
 
 const AWS_END_POINT = 'https://service.chime.aws.amazon.com/console';
 AWS.config.credentials = new AWS.Credentials(process.env.ACCESS_KEY, process.env.SECRET_KEY, null);
@@ -27,16 +30,22 @@ const joinMeeting: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (ev
       ExternalUserId: `${uuid().substring(0, 8)}#${clientId}`,
     }).promise();
   
-    return formatJSONResponse({
+    const response = formatJSONResponse({
       info: {
         meeting,
         attendee,
       },
       event,
-    });    
+    });
+
+    return {
+      ...response,
+      headers,
+    }
   } catch (error) {
     throw new Error(JSON.stringify({
-      statusCode: 404,      
+      statusCode: 404,    
+      headers,  
       message: error,
       event,
     }));

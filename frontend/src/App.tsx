@@ -22,7 +22,7 @@ const meetingConfig = {
 
 function App() {
   useEffect(() => {
-    const meetingId = 'thisisfirstmeeting';
+    const meetingId = 'this-is-first-meeting';
     const clientId = 'test-user';
 
     console.log('============= Start meeting');
