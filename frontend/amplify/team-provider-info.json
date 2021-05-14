@@ -10,6 +10,14 @@
       "StackName": "amplify-videochatclient-dev-153213",
       "StackId": "arn:aws:cloudformation:ap-northeast-1:362693367578:stack/amplify-videochatclient-dev-153213/76eef6b0-b159-11eb-ab1a-0e6dc6b1afd3",
       "AmplifyAppId": "d41u1fa8twpj7"
+    },
+    "categories": {
+      "function": {
+        "createMeeting": {
+          "deploymentBucketName": "amplify-videochatclient-dev-153213-deployment",
+          "s3Key": "amplify-builds/createMeeting-634e532f48746b69522b-build.zip"
+        }
+      }
     }
   }
 }

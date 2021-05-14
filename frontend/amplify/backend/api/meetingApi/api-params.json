@@ -1,0 +1,35 @@
+{
+  "paths": [
+    {
+      "name": "/items",
+      "lambdaFunction": "createMeeting",
+      "privacy": {
+        "open": true
+      },
+      "policyResourceName": "/items"
+    }
+  ],
+  "resourceName": "meetingApi",
+  "apiName": "meetingApi",
+  "functionArns": [
+    {
+      "lambdaFunction": "createMeeting"
+    }
+  ],
+  "privacy": {
+    "auth": 0,
+    "unauth": 0,
+    "authRoleName": "amplify-videochatclient-dev-153213-authRole",
+    "unAuthRoleName": "amplify-videochatclient-dev-153213-unauthRole"
+  },
+  "dependsOn": [
+    {
+      "category": "function",
+      "resourceName": "createMeeting",
+      "attributes": [
+        "Name",
+        "Arn"
+      ]
+    }
+  ]
+}
