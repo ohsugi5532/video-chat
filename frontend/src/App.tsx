@@ -1,10 +1,10 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import routes from './routes';
 import Home from './pages/Home';
 import DeviceSetup from './pages/DeviceSetup';
 import Meeting from './pages/Meeting';
-import {createMeeting, deleteMeeting, joinMeeting} from './utils/api';
+// import {createMeeting, deleteMeeting, joinMeeting} from './utils/api';
 import { ThemeProvider } from 'styled-components';
 import { LogLevel } from 'amazon-chime-sdk-js';
 import {
@@ -20,7 +20,7 @@ const meetingConfig = {
   logLevel: LogLevel.INFO,
 }
 
-function App() {
+const App: React.FC = () => {
   // 疎通確認
   // 
   // useEffect(() => {

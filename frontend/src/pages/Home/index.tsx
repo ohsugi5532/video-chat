@@ -29,10 +29,15 @@ const Home: React.FC = () => {
       return;
     }
 
-    const data = await createMeeting(meetingId, clientId);
+    const result1 = await createMeeting(meetingId, clientId);
+    const result2 = await joinMeeting(
+      result1.info.meeting.Meeting.MeetingId, 
+      result1.info.attendee.Attendee.ExternalUserId
+    );
+
     await meetingManager.join({
-      meetingInfo: data.info.meeting,
-      attendeeInfo: data.info.meeting,
+      meetingInfo: result2.info.meeting.Meeting,
+      attendeeInfo: result2.info.attendee.Attendee,
     });
 
     history.push(routes.DEVICE);
@@ -41,17 +46,17 @@ const Home: React.FC = () => {
   const join = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // if (!meetingId || !clientId) {
-    //   if (!meetingId) setMeetingIdError(true);
-    //   if (!clientId) setClientIdError(true);
-    //   return;
-    // }
+    if (!meetingId || !clientId) {
+      if (!meetingId) setMeetingIdError(true);
+      if (!clientId) setClientIdError(true);
+      return;
+    }
 
-    // const data = await joinMeeting(meetingId, clientId);
-    // await meetingManager.join({
-    //   meetingInfo: data.info.meeting,
-    //   attendeeInfo: data.info.meeting,
-    // });
+    const data = await joinMeeting(meetingId, clientId);
+    await meetingManager.join({
+      meetingInfo: data.info.meeting,
+      attendeeInfo: data.info.meeting,
+    });
 
     history.push(routes.DEVICE);
   }
