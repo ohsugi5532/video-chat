@@ -6,12 +6,12 @@ const ATTENDEE_TABLE_NAME = process.env.ATTENDEE_TABLE_NAME;
 const ddb = new AWS.DynamoDB();
 const oneDayFromNow = Math.floor(Date.now() / 1000) + 60 * 60 * 24;
 
-export const getMeeting = async (meetingTitle) => {
+export const getMeeting = async (title) => {
   const result = await ddb.getItem({
     TableName: MEETING_TABLE_NAME,
     Key: {
       'Title': {
-        S: meetingTitle
+        S: title
       },
     },
   }).promise();
@@ -36,10 +36,11 @@ export const getAttendeeName = async (title, attendeeId) => {
     TableName: ATTENDEE_TABLE_NAME,
     Key: {
       'AttendeeId': {
-        S: `${title}/${attendeeId}`
+        S: `${title}${attendeeId}`
       }
     }
   }).promise();
+
   if (!result.Item) {
     return 'Unknown';
   }
@@ -51,9 +52,11 @@ export const putAttendee = async (title, attendeeId, name) => {
     TableName: ATTENDEE_TABLE_NAME,
     Item: {
       'AttendeeId': {
-        S: `${title}/${attendeeId}`
+        S: `${title}${attendeeId}`
       },
-      'Name': { S: name },
+      'Name': { 
+        S: name 
+      },
       'TTL': {
         N: '' + oneDayFromNow
       }

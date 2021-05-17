@@ -21,15 +21,14 @@ const joinMeeting: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (ev
   const name = event.body.name;
 
   try {
-
     let meetingInfo = await getMeeting(title);
-    const meetingId = uuid();
     if (!meetingInfo) {
+      const meetingId = uuid();
       meetingInfo = await chime.createMeeting({
         ClientRequestToken: meetingId,
         ExternalMeetingId: meetingId,
         MediaRegion: process.env.AWS_REGION,
-      })
+      }).promise();
       await putMeeting(title, meetingInfo);
     }
 
@@ -37,8 +36,8 @@ const joinMeeting: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (ev
       MeetingId: meetingInfo.Meeting.MeetingId,
       ExternalUserId: uuid(),
     }).promise();
-    putAttendee(title, attendeeInfo.Attendee.AttendeeId, name);
-  
+    await putAttendee(title, attendeeInfo.Attendee.AttendeeId, name);
+
     const response = formatJSONResponse({
       info: {
         meetingInfo,
@@ -46,7 +45,6 @@ const joinMeeting: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (ev
       },
       event,
     });
-
     return {
       ...response,
       headers,
