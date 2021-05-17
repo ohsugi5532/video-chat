@@ -23,37 +23,6 @@ const meetingConfig = {
 }
 
 const App: React.FC = () => {
-  // 疎通確認
-  // 
-  // useEffect(() => {
-  //   const meetingId = 'this-is-first-meeting';
-  //   const clientId = 'test-user';
-
-  //   console.log('============= Start meeting');
-
-  //   createMeeting(
-  //     meetingId,
-  //     clientId  
-  //   ).then(result => {
-  //     console.log('============= Create')
-  //     console.log(result);
-
-  //     joinMeeting(
-  //       result.info.meeting.Meeting.MeetingId,
-  //       result.info.attendee.Attendee.ExternalUserId
-  //     ).then(result => {
-  //       console.log('============= Join')
-  //       console.log(result);
-
-  //       deleteMeeting(result.info.meeting.Meeting.MeetingId).then(() => {
-  //         console.log('============= End meeting');
-  //       })
-  //     })
-  //   }).catch(err => {
-  //     console.log(err)
-  //   })
-  // }, []);
-
   return (
     <Router>
       <AppStateProvider>
