@@ -8,8 +8,8 @@ import { StyledLayout, StyledContent } from './Styled';
 import { useNavigation } from '../../providers/NavigationProvider';
 import useMeetingEndRedirect from '../../hooks/useMeetingEndRedirect';
 import MeetingMetrics from '../../organisms/MeetingMetrics';
-import Navigation from '../../organisms/Navigation';
-import MeetingRoster from '../../organisms/MeetingRoster';
+import MeetingControls from '../../organisms/MeetingControls';
+import NavigationControl from '../../organisms/Navigation/NavigationControl';
 
 const Meeting: React.FC = () => {
   useMeetingEndRedirect();
@@ -24,9 +24,9 @@ const Meeting: React.FC = () => {
             className="videos"
             noRemoteVideoView={<MeetingDetails />}
           />
+            <MeetingControls />
         </StyledContent>
-        {showNavbar ? <Navigation /> : null}
-        {showRoster ? <MeetingRoster /> : null}
+        <NavigationControl />
       </StyledLayout>
     </UserActivityProvider>
   )

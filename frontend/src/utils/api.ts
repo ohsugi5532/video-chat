@@ -4,8 +4,8 @@ const BASE_URL = 'https://1ccis2cedd.execute-api.ap-northeast-1.amazonaws.com/de
 
 export type MeetingResponse = {
   info: {
-    meeting: any;
-    attendee: any;
+    meetingInfo: any;
+    attendeeInfo: any;
   }
 }
 
@@ -33,12 +33,12 @@ export async function createMeeting (
 }
 
 export async function joinMeeting (
-  meetingId: string,
-  clientId: string
+  title: string,
+  name: string
 ): Promise<MeetingResponse> {
   const data = {
-    meetingId,
-    clientId,
+    title,
+    name,
   }
   const headers = {
     'Content-Type': 'application/json', 
@@ -56,10 +56,10 @@ export async function joinMeeting (
 }
 
 export async function deleteMeeting (
-  meetingId: string,
+  title: string,
 ) {
   const data = {
-    meetingId,
+    title,
   }
   const headers = {
     'Content-Type': 'application/json', 
@@ -75,3 +75,24 @@ export async function deleteMeeting (
 
   return result;
 }
+
+export function getAttendee (
+  title: string
+) {
+  return async (chimeAttendeeId: string, _externalUserId?: string | undefined) => {
+    const response = await axios.get(`${BASE_URL}/getAttendee`, {params: {
+      title,
+      chimeAttendeeId,
+    }});
+    const result = await response.data;
+  
+    if (result.error) {
+      throw new Error(`Server error: ${result.error}`);
+    }
+  
+    return {
+      name: result.attendeeInfo.name,
+    };
+  }
+};
+

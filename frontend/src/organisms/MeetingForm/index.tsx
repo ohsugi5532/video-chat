@@ -19,7 +19,7 @@ import { getErrorContext } from '../../providers/ErrorProvider';
 import routes from '../../routes';
 import Card from '../../molecules/Card';
 import DevicePermissionPrompt from '../DevicePermissionPrompt';
-import { createMeeting } from '../../utils/api';
+import { joinMeeting, getAttendee } from '../../utils/api';
 import { useAppState } from '../../providers/AppStateProvider';
 
 const MeetingForm: React.FC = () => {
@@ -55,14 +55,13 @@ const MeetingForm: React.FC = () => {
     }
 
     setIsLoading(true);
-    // meetingManager.getAttendee = createGetAttendeeCallback(id);
+    meetingManager.getAttendee = getAttendee(id);
 
     try {
-      const { info } = await createMeeting(id, attendeeName);
-
+      const { info } = await joinMeeting(id, attendeeName);
       await meetingManager.join({
-        meetingInfo: info.meeting.Meeting,
-        attendeeInfo: info.meeting.Attendee
+        meetingInfo: info.meetingInfo.Meeting,
+        attendeeInfo: info.attendeeInfo.Attendee
       });
 
       setAppMeetingInfo(id, attendeeName);
