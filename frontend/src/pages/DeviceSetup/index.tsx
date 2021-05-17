@@ -19,7 +19,7 @@ import {
   ModalBody,
   ModalHeader
 } from 'amazon-chime-sdk-component-library-react';
-import TestSound from './TestSound';
+import TestSound from '../../utils/TestSound';
 import{ StyledContainer, StyledDiv, StyledPanel } from './Styled';
 import Card from "../../molecules/Card";
 import { useAppState } from "../../providers/AppStateProvider";
