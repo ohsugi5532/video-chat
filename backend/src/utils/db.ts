@@ -3,6 +3,7 @@ import * as AWS from 'aws-sdk';
 const MEETING_TABLE_NAME = process.env.MEETING_TABLE_NAME;
 const ATTENDEE_TABLE_NAME = process.env.ATTENDEE_TABLE_NAME;
 
+AWS.config.credentials = new AWS.Credentials(process.env.ACCESS_KEY, process.env.SECRET_KEY, null);
 const ddb = new AWS.DynamoDB();
 const oneDayFromNow = Math.floor(Date.now() / 1000) + 60 * 60 * 24;
 
