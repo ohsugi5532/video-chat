@@ -11,6 +11,7 @@ import {
   lightTheme,
   MeetingProvider,
 } from 'amazon-chime-sdk-component-library-react';
+import AppStateProvider from './providers/AppStateProvider';
 
 const meetingConfig = {
   name: 'SDK_LOGS',
@@ -54,15 +55,17 @@ const App: React.FC = () => {
 
   return (
     <Router>
-      <ThemeProvider theme={lightTheme}>
-        <MeetingProvider {...meetingConfig}>
-          <Switch>
-            <Route exact path={routes.HOME} component={Home} />
-            <Route exact path={routes.DEVICE} component={DeviceSetup} />
-            <Route exact path={routes.MEETING} component={Meeting} />
-          </Switch>
-        </MeetingProvider>      
-      </ThemeProvider>
+      <AppStateProvider>
+        <ThemeProvider theme={lightTheme}>
+          <MeetingProvider {...meetingConfig}>
+            <Switch>
+              <Route exact path={routes.HOME} component={Home} />
+              <Route exact path={routes.DEVICE} component={DeviceSetup} />
+              <Route exact path={routes.MEETING} component={Meeting} />
+            </Switch>
+          </MeetingProvider>      
+        </ThemeProvider>
+      </AppStateProvider>
     </Router>
   );
 }
