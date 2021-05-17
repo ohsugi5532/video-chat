@@ -11,7 +11,7 @@ type AppStateValue = {
 }
 
 const AppStateContext = createContext<AppStateValue | null>(null);
-const query = new URLSearchParams(location.search);
+const query = new URLSearchParams(window.location.search);
 
 const AppStateProvider: React.FC<AppStateProviderProps> = props => {
   const [meetingId, setMeeting] = useState(query.get('meetingId') || '');

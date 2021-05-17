@@ -18,6 +18,8 @@ import {
 } from 'amazon-chime-sdk-component-library-react';
 import TestSound from './TestSound';
 import{ StyledContainer, StyledDiv, StyledPanel } from './Styled';
+import { useAppState } from "../../providers/AppStateProvider";
+
 
 const Track = styled.div`
   width: 100%;
@@ -38,8 +40,8 @@ const Progress = styled.div`
 
 const DeviceSetup: React.FC = () => {
   const history = useHistory();
-  // const { meetingId, localUserName } = useAppState();
   const meetingManager = useMeetingManager();
+  const { meetingId } = useAppState();
 
   const activityBarRef = useRef<HTMLDivElement>(null);
   useLocalAudioInputActivityPreview(activityBarRef);
@@ -58,7 +60,7 @@ const DeviceSetup: React.FC = () => {
   const enterMeeting = async () => {
     try {
       await meetingManager.start();
-      history.push(`${routes.MEETING}`);
+      history.push(`${routes.MEETING}/${meetingId}`);
     } catch(err) {
       // nothing to do.
     }

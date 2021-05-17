@@ -10,10 +10,12 @@ import {
 } from 'amazon-chime-sdk-component-library-react';
 import { createMeeting, joinMeeting } from '../../utils/api';
 import { StyledContainer, StyledButtonContainer } from "./Styled";
+import { useAppState } from "../../providers/AppStateProvider";
 
 const Home: React.FC = () => {
   const meetingManager = useMeetingManager();
   const history = useHistory();
+  const { setAppMeetingInfo } = useAppState();
 
   const [meetingId, setMeetingId] = useState<string>('');
   const [clientId, setClientId] = useState<string>('');
@@ -23,13 +25,16 @@ const Home: React.FC = () => {
   const organize = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!meetingId || !clientId) {
-      if (!meetingId) setMeetingIdError(true);
-      if (!clientId) setClientIdError(true);
+    const id = meetingId.trim().toLocaleLowerCase();
+    const attendeeName = clientId.trim();
+
+    if (!id || !attendeeName) {
+      if (!id) setMeetingIdError(true);
+      if (!attendeeName) setClientIdError(true);
       return;
     }
 
-    const result1 = await createMeeting(meetingId, clientId);
+    const result1 = await createMeeting(id, attendeeName);
     const result2 = await joinMeeting(
       result1.info.meeting.Meeting.MeetingId, 
       result1.info.attendee.Attendee.ExternalUserId
@@ -40,24 +45,29 @@ const Home: React.FC = () => {
       attendeeInfo: result2.info.attendee.Attendee,
     });
 
+    setAppMeetingInfo(id, attendeeName);
     history.push(routes.DEVICE);
   }
 
   const join = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!meetingId || !clientId) {
-      if (!meetingId) setMeetingIdError(true);
-      if (!clientId) setClientIdError(true);
+    const id = meetingId.trim().toLocaleLowerCase();
+    const attendeeName = clientId.trim();
+
+    if (!id || !attendeeName) {
+      if (!id) setMeetingIdError(true);
+      if (!attendeeName) setClientIdError(true);
       return;
     }
 
-    const data = await joinMeeting(meetingId, clientId);
+    const data = await joinMeeting(id, attendeeName);
     await meetingManager.join({
       meetingInfo: data.info.meeting,
       attendeeInfo: data.info.meeting,
     });
 
+    setAppMeetingInfo(id, attendeeName);
     history.push(routes.DEVICE);
   }
 

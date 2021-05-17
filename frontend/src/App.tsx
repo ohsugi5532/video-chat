@@ -60,8 +60,8 @@ const App: React.FC = () => {
           <MeetingProvider {...meetingConfig}>
             <Switch>
               <Route exact path={routes.HOME} component={Home} />
-              <Route exact path={routes.DEVICE} component={DeviceSetup} />
-              <Route exact path={routes.MEETING} component={Meeting} />
+              <Route path={routes.DEVICE} component={DeviceSetup} />
+              <Route path={routes.MEETING} component={Meeting} />
             </Switch>
           </MeetingProvider>      
         </ThemeProvider>
