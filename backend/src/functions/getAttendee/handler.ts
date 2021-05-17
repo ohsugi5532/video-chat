@@ -1,10 +1,9 @@
 import 'source-map-support/register';
-import type { ValidatedEventAPIGatewayProxyEvent } from '@libs/apiGateway';
+import type { APIGatewayProxyEvent } from "aws-lambda"
 import { formatJSONResponse } from '@libs/apiGateway';
 import { middyfy } from '@libs/lambda';
-import schema from './schema';
 import * as AWS from 'aws-sdk';
-import {getMeeting} from '../../utils/db';
+import {getAttendeeName} from '../../utils/db';
 
 const headers = {
   'Access-Control-Allow-Origin': '*',
@@ -16,15 +15,18 @@ AWS.config.credentials = new AWS.Credentials(process.env.ACCESS_KEY, process.env
 const chime = new AWS.Chime({ region: 'us-east-1' }); // MediaRegionと同じくTOKYOにするとエラーになる
 chime.endpoint = new AWS.Endpoint(AWS_END_POINT);  
 
-const deleteMeeting: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
+const getAttendee = async (event: APIGatewayProxyEvent) => {
   try {
-    const title = event.body.title;
-    let meetingInfo = await getMeeting(title);
-    await chime.deleteMeeting({
-      MeetingId: meetingInfo.Meeting.MeetingId,
-    }).promise();
+    const title = event.queryStringParameters.title;
+    const attendeeId = event.queryStringParameters.attendeeId;
+
+    const name = await getAttendeeName(title, attendeeId);
   
     const response = formatJSONResponse({
+      attendeeInfo: {
+        attendeeId,
+        name,
+      },
       event,
     });
 
@@ -42,4 +44,4 @@ const deleteMeeting: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (
   }
 }
 
-export const main = middyfy(deleteMeeting);
+export const main = middyfy(getAttendee);

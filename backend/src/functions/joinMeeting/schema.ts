@@ -1,8 +1,8 @@
 export default {
   type: "object",
   properties: {
-    meetingId: { type: 'string' },
-    clientId: { type: 'string' },
+    title: { type: 'string' },
+    name: { type: 'string' },
   },
-  required: ['meetingId', 'clientId'],
+  required: ['title', 'name'],
 } as const;

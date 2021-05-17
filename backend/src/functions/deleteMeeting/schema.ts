@@ -1,7 +1,7 @@
 export default {
   type: "object",
   properties: {
-    meetingId: { type: 'string' },
+    title: { type: 'string' },
   },
-  required: ['meetingId'],
+  required: ['title'],
 } as const;

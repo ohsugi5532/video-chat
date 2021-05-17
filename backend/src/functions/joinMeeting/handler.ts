@@ -5,35 +5,44 @@ import { middyfy } from '@libs/lambda';
 import schema from './schema';
 import * as AWS from 'aws-sdk';
 import {v4 as uuid} from 'uuid';
+import {getMeeting, putAttendee, putMeeting} from '../../utils/db';
 
 const headers = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': '*',
 }
-
 const AWS_END_POINT = 'https://service.chime.aws.amazon.com/console';
 AWS.config.credentials = new AWS.Credentials(process.env.ACCESS_KEY, process.env.SECRET_KEY, null);
 const chime = new AWS.Chime({ region: 'us-east-1' }); // MediaRegionと同じくTOKYOにするとエラーになる
 chime.endpoint = new AWS.Endpoint(AWS_END_POINT);  
 
 const joinMeeting: ValidatedEventAPIGatewayProxyEvent<typeof schema> = async (event) => {
-  const meetingId = event.body.meetingId;
-  const clientId = event.body.clientId;
+  const title = event.body.title;
+  const name = event.body.name;
 
   try {
-    const meeting = await chime.getMeeting({
-      MeetingId: meetingId,
+
+    let meetingInfo = await getMeeting(title);
+    const meetingId = uuid();
+    if (!meetingInfo) {
+      meetingInfo = await chime.createMeeting({
+        ClientRequestToken: meetingId,
+        ExternalMeetingId: meetingId,
+        MediaRegion: process.env.AWS_REGION,
+      })
+      await putMeeting(title, meetingInfo);
+    }
+
+    const attendeeInfo = await chime.createAttendee({
+      MeetingId: meetingInfo.Meeting.MeetingId,
+      ExternalUserId: uuid(),
     }).promise();
-  
-    const attendee = await chime.createAttendee({
-      MeetingId: meeting.Meeting.MeetingId,
-      ExternalUserId: `${uuid().substring(0, 8)}#${clientId}`,
-    }).promise();
+    putAttendee(title, attendeeInfo.Attendee.AttendeeId, name);
   
     const response = formatJSONResponse({
       info: {
-        meeting,
-        attendee,
+        meetingInfo,
+        attendeeInfo,
       },
       event,
     });
