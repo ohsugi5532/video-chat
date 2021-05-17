@@ -11,6 +11,7 @@ import {
   lightTheme,
   MeetingProvider,
 } from 'amazon-chime-sdk-component-library-react';
+import NoMeetingRedirect from './organisms/NoMeetingRedirect';
 import AppStateProvider from './providers/AppStateProvider';
 import NavigationProvider from './providers/NavigationProvider';
 
@@ -31,8 +32,17 @@ const App: React.FC = () => {
             <NavigationProvider>
               <Switch>
                 <Route exact path={routes.HOME} component={Home} />
-                <Route path={routes.DEVICE} component={DeviceSetup} />
-                <Route path={routes.MEETING} component={Meeting} />
+                <Route path={routes.DEVICE}>
+                  <NoMeetingRedirect>
+                    <DeviceSetup />
+                  </NoMeetingRedirect>
+                </Route>
+
+                <Route path={routes.MEETING}>
+                  <NoMeetingRedirect>
+                    <Meeting />
+                  </NoMeetingRedirect>
+                </Route>
               </Switch>
             </NavigationProvider>
           </MeetingProvider>      

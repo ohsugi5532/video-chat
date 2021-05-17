@@ -15,9 +15,13 @@ import {
   useLocalAudioInputActivityPreview,
   useAudioOutputs,
   useMeetingManager,
+  Modal,
+  ModalBody,
+  ModalHeader
 } from 'amazon-chime-sdk-component-library-react';
 import TestSound from './TestSound';
 import{ StyledContainer, StyledDiv, StyledPanel } from './Styled';
+import Card from "../../molecules/Card";
 import { useAppState } from "../../providers/AppStateProvider";
 
 
@@ -48,6 +52,7 @@ const DeviceSetup: React.FC = () => {
 
   const { selectedDevice } = useAudioOutputs();
   const [selectedOutput, setSelectedOutput] = useState(selectedDevice);
+  const [error, setError] = useState('');
 
   const handleChange = (deviceId: string): void => {
     setSelectedOutput(deviceId);
@@ -62,43 +67,57 @@ const DeviceSetup: React.FC = () => {
       await meetingManager.start();
       history.push(`${routes.MEETING}/${meetingId}`);
     } catch(err) {
-      // nothing to do.
+      setError(err.message);
     }
   }
 
   return (
-    <StyledContainer>
-      <StyledDiv>
-        <StyledPanel>
-          <Heading tag="h2" level={6}>
-            Audio
-          </Heading>
-          <MicSelection />
-          <Label style={{ display: 'block', marginBottom: '.5rem' }}>
-            Microphone activity
-          </Label>
-          <Track>
-            <Progress ref={activityBarRef} />
-          </Track>
-          <div style={{ marginTop: '1rem' }}>
-            <SpeakerSelection onChange={handleChange} />
-            <SecondaryButton label="Test speakers" onClick={handleTestSpeaker} />
-          </div>
-        </StyledPanel>
-        <StyledPanel>
-          <Heading tag="h2" level={6}>
-            Video
-          </Heading>
-          <CameraSelection />
-          <QualitySelection />
-          <Label style={{ display: 'block', marginBottom: '.5rem' }}>
-            Video preview
-          </Label>
-          <PreviewVideo />
-        </StyledPanel>
-      </StyledDiv>
-      <PrimaryButton label={'Enter'} onClick={enterMeeting} />
-    </StyledContainer>
+    <>
+      <StyledContainer>
+        <StyledDiv>
+          <StyledPanel>
+            <Heading tag="h2" level={6}>
+              Audio
+            </Heading>
+            <MicSelection />
+            <Label style={{ display: 'block', marginBottom: '.5rem' }}>
+              Microphone activity
+            </Label>
+            <Track>
+              <Progress ref={activityBarRef} />
+            </Track>
+            <div style={{ marginTop: '1rem' }}>
+              <SpeakerSelection onChange={handleChange} />
+              <SecondaryButton label="Test speakers" onClick={handleTestSpeaker} />
+            </div>
+          </StyledPanel>
+          <StyledPanel>
+            <Heading tag="h2" level={6}>
+              Video
+            </Heading>
+            <CameraSelection />
+            <QualitySelection />
+            <Label style={{ display: 'block', marginBottom: '.5rem' }}>
+              Video preview
+            </Label>
+            <PreviewVideo />
+          </StyledPanel>
+        </StyledDiv>
+        <PrimaryButton label={'Enter'} onClick={enterMeeting} />
+      </StyledContainer>
+      {error && (
+        <Modal size="md" onClose={(): void => setError('')}>
+          <ModalHeader title={`Meeting ID: ${meetingId}`} />
+          <ModalBody>
+            <Card
+              title="Unable to join meeting"
+              description="There was an issue in joining this meeting. Check your connectivity and try again."
+              smallText={error}
+            />
+          </ModalBody>
+        </Modal>
+      )}
+    </>
   )
 };
 
