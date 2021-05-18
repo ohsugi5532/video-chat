@@ -37,7 +37,7 @@ export const getAttendeeName = async (title, attendeeId) => {
     TableName: ATTENDEE_TABLE_NAME,
     Key: {
       'AttendeeId': {
-        S: `${title}${attendeeId}`
+        S: `${title}/${attendeeId}`
       }
     }
   }).promise();
@@ -53,7 +53,7 @@ export const putAttendee = async (title, attendeeId, name) => {
     TableName: ATTENDEE_TABLE_NAME,
     Item: {
       'AttendeeId': {
-        S: `${title}${attendeeId}`
+        S: `${title}/${attendeeId}`
       },
       'Name': { 
         S: name 
