@@ -4,7 +4,6 @@ import routes from './routes';
 import Home from './pages/Home';
 import DeviceSetup from './pages/DeviceSetup';
 import Meeting from './pages/Meeting';
-// import {createMeeting, deleteMeeting, joinMeeting} from './utils/api';
 import { ThemeProvider } from 'styled-components';
 import { LogLevel } from 'amazon-chime-sdk-js';
 import {
